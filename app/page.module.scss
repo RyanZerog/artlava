@@ -1,0 +1,365 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  background: #f2f4f7;
+  color: #1f2937;
+}
+
+.sidebar {
+  width: 72px;
+  min-width: 72px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 12px;
+  background: #ffffff;
+  border-right: 1px solid rgba(33, 25, 34, 0.25);
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.navGroup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.navButton,
+.navButtonActive,
+.navButtonBottom {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.navButton:hover {
+  background: #f0f0f0;
+}
+
+.navButton .navIcon {
+  filter: grayscale(1) brightness(0.42);
+}
+
+.navButtonActive {
+  background: #ffe7ec;
+}
+
+.navButtonActive .navIcon {
+  filter: brightness(0) saturate(100%) invert(16%) sepia(100%) saturate(5834%)
+    hue-rotate(343deg) brightness(92%) contrast(115%);
+}
+
+.navIcon {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+  display: block;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.navButtonBottom {
+  margin-top: auto;
+  color: #4b4b4b;
+  font-size: 20px;
+}
+
+.workspace {
+  width: calc(100% - 72px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topHeader {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #eceef2;
+}
+
+.searchBox {
+  flex: 1;
+  height: 48px;
+  border-radius: 14px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #dadde3;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+.searchTrigger {
+  border: 0;
+  background: #fff2f4;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.searchTrigger:hover {
+  background: #ffe4ea;
+}
+
+.searchIcon {
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loginEntryButton {
+  height: 34px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #e60023;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(230, 0, 35, 0.22);
+}
+
+.loginEntryButton:hover {
+  background: #cc001f;
+}
+
+.avatarButton {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ead8bf;
+  border-radius: 50%;
+  background: #f7e2c4;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mainContent {
+  padding: 0 16px 28px;
+}
+
+.masonry {
+  margin-top: 0;
+  column-count: 6;
+  column-gap: 16px;
+}
+
+.card {
+  break-inside: avoid;
+  margin-bottom: 14px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.cardImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cardMeta {
+  padding: 8px 8px 6px;
+}
+
+.cardTitle {
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: #171717;
+}
+
+.cardInfo {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.cardInfo span {
+  font-size: 11px;
+  color: #7c7c7c;
+}
+
+.moreButton {
+  width: 24px;
+  height: 20px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #7c7c7c;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 13px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  z-index: 90;
+}
+
+@media (max-width: 1460px) {
+  .masonry {
+    column-count: 5;
+  }
+}
+
+@media (max-width: 1240px) {
+  .masonry {
+    column-count: 4;
+  }
+}
+
+@media (max-width: 980px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(33, 25, 34, 0.25);
+  }
+
+  .navGroup {
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .navButton,
+  .navButtonActive,
+  .navButtonBottom {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .navButtonBottom {
+    margin-top: 0;
+  }
+
+  .workspace {
+    width: 100%;
+  }
+
+  .topHeader {
+    height: 72px;
+    padding: 12px;
+  }
+
+  .searchBox {
+    height: 40px;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+
+  .searchTrigger {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+  }
+
+  .headerActions {
+    gap: 8px;
+  }
+
+  .loginEntryButton {
+    height: 30px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+
+  .mainContent {
+    padding: 0 12px 22px;
+  }
+
+  .masonry {
+    column-count: 2;
+    column-gap: 12px;
+  }
+}
+
+@media (max-width: 620px) {
+  .masonry {
+    column-count: 1;
+  }
+}
