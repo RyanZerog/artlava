@@ -58,8 +58,6 @@ const galleryItems: GalleryItem[] = [
   { id: 19, imagePath: "/figma/home/4-200.png", imageHeight: 531, title: "园林设计图", source: "..." },
 ];
 
-const assetUrl = (imageRef: string) => withBasePath(`${ASSET_BASE}/${imageRef}.png`);
-
 export default function Home() {
   const router = useRouter();
   const [activeNav, setActiveNav] = useState<NavKey>("home");

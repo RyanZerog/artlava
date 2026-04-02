@@ -2,23 +2,37 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Local development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Local static preview
+
+Build a local-root version and preview it:
+
+```bash
+npm run preview:local
+```
+
+This generates `.next-local/` and serves it at `http://localhost:3000/`.
+
+### GitHub Pages preview
+
+Build a GitHub Pages version and preview it locally:
+
+```bash
+npm run preview:pages
+```
+
+This generates `.next-pages/` and serves it at `http://localhost:3000/artlava/`.
 
 ## Learn More
 
@@ -40,10 +54,14 @@ This project is already configured for GitHub Pages:
 
 After the workflow finishes, GitHub Pages will publish the static site automatically.
 
-### Local verification
+### Build outputs are separated
 
 ```bash
-npm run build
+npm run build:local
+npm run build:pages
 ```
 
-If the build succeeds, the exported static files will be generated in the `out/` directory.
+- `build:local` → `.next-local/`
+- `build:pages` → `.next-pages/`
+
+This avoids mixing your local preview build with the GitHub Pages build.

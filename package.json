@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node scripts/run-next.mjs dev local",
+    "build": "npm run build:local",
+    "build:local": "node scripts/build-export.mjs local",
+    "build:pages": "node scripts/build-export.mjs pages",
+    "start": "node scripts/serve-export.mjs --dir .next-local --port 3000",
+    "preview:local": "npm run build:local && npm run start",
+    "preview:pages": "npm run build:pages && node scripts/serve-export.mjs --dir .next-pages --port 3000 --basePath /artlava",
     "lint": "eslint",
     "figma:fetch": "node scripts/fetch-figma.mjs"
   },
