@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SettingsGearIcon } from "@/components/settings-gear-icon";
 import { cssBackgroundUrl, withBasePath } from "@/lib/paths";
 import {
@@ -21,6 +21,7 @@ import {
   type CreateType,
   type DesignItem,
   type NavKey,
+  type SettingSection,
   type WorkspacePanelKey,
   type WorkspaceTabKey,
   workspaceTabs,
@@ -103,7 +104,6 @@ function panelFromNav(key: NavKey): WorkspacePanelKey {
 
 export function PersonalArea({ initialPanel }: PersonalAreaProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [panel, setPanel] = useState<WorkspacePanelKey>(initialPanel);
   const [activeTab, setActiveTab] = useState<WorkspaceTabKey>("art");
   const [searchValue, setSearchValue] = useState("");
@@ -113,13 +113,11 @@ export function PersonalArea({ initialPanel }: PersonalAreaProps) {
   const [selectedCreateType, setSelectedCreateType] = useState<CreateType["key"]>("art");
   const [draftTitle, setDraftTitle] = useState("");
   const [selectedContactId, setSelectedContactId] = useState<number>(contacts[0]?.id ?? 0);
-  const [settingsSection, setSettingsSection] = useState(
-    (searchParams.get("section") as "profile" | "preferences" | "support" | null) ?? "profile",
-  );
+  const [settingsSection, setSettingsSection] = useState<SettingSection["key"]>("profile");
   const [profileForm, setProfileForm] = useState<ProfileFormState>(settingsDefaultProfile);
   const [toast, setToast] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("全部");
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   const activeNav: NavKey =
     panel === "create"
@@ -607,7 +605,7 @@ export function PersonalArea({ initialPanel }: PersonalAreaProps) {
               onClick={() => {
                 setSettingsSection("profile");
                 setPanel("settings");
-                router.push("/settings?section=profile");
+                router.push("/settings");
               }}
             />
           </div>
@@ -635,7 +633,7 @@ export function PersonalArea({ initialPanel }: PersonalAreaProps) {
                   onClick={() => {
                     setSettingsSection("profile");
                     setPanel("settings");
-                    router.push("/settings?section=profile");
+                    router.push("/settings");
                   }}
                 >
                   设置个人资料

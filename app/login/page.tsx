@@ -70,7 +70,7 @@ export default function LoginPage() {
   const [activeNav, setActiveNav] = useState<NavKey | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const [toast, setToast] = useState<string | null>(null);
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   const showToast = (message: string) => {
     if (toastTimerRef.current) {
@@ -176,7 +176,7 @@ export default function LoginPage() {
               type="button"
               className={styles.avatarButton}
               aria-label="个人菜单"
-              onClick={() => router.push("/settings?section=profile")}
+              onClick={() => router.push("/settings")}
             />
           </div>
         </header>

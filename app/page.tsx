@@ -17,7 +17,7 @@ export default function Home() {
   const [hiddenIds, setHiddenIds] = useState<number[]>([]);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
   const visibleItems = useMemo(() => {
     const keyword = searchValue.replace(/\s+/g, " ").trim().toLowerCase();
@@ -147,7 +147,7 @@ export default function Home() {
               type="button"
               className={styles.avatarButton}
               aria-label="修改个人信息"
-              onClick={() => router.push("/settings?section=profile")}
+              onClick={() => router.push("/settings")}
             />
           </div>
         </header>
