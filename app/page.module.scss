@@ -59,6 +59,7 @@
 
 .navButtonActive {
   background: #ffe7ec;
+  color: #e60023;
 }
 
 .navButtonActive .navIcon {
@@ -78,8 +79,14 @@
 
 .navButtonBottom {
   margin-top: auto;
-  color: #4b4b4b;
-  font-size: 20px;
+  color: #111111;
+  display: grid;
+  place-items: center;
+}
+
+.settingsIcon {
+  width: 22px;
+  height: 22px;
 }
 
 .workspace {
@@ -204,6 +211,15 @@
   border-radius: 6px;
   overflow: hidden;
   background: #fff;
+  position: relative;
+}
+
+.cardLink {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
 }
 
 .cardImage {
@@ -244,6 +260,69 @@
   background: transparent;
   color: #7c7c7c;
   font-size: 12px;
+  cursor: pointer;
+}
+
+.moreWrap {
+  position: relative;
+}
+
+.moreMenu {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  min-width: 104px;
+  padding: 6px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
+  border: 1px solid #ebeef4;
+  z-index: 10;
+}
+
+.moreMenuButton {
+  width: 100%;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  color: #b42318;
+  cursor: pointer;
+}
+
+.moreMenuButton:hover {
+  background: #fff4f2;
+}
+
+.emptyState {
+  min-height: 320px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.emptyState h2 {
+  font-size: 28px;
+  color: #111827;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.resetButton {
+  height: 36px;
+  border: 0;
+  border-radius: 10px;
+  padding: 0 16px;
+  background: #e60023;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 

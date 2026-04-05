@@ -1,23 +1,12 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { SettingsGearIcon } from "@/components/settings-gear-icon";
 import { cssBackgroundUrl } from "@/lib/paths";
 import styles from "./page.module.scss";
 
-type ToastStatus = "info" | "success" | "error";
-
-type ToastState = {
-  message: string;
-  status: ToastStatus;
-};
-
 type NavKey = "home" | "profile" | "create" | "bell" | "message";
-
-type LoginErrors = {
-  email?: string;
-  password?: string;
-};
 
 const ASSET_BASE = "/figma/assets";
 
@@ -32,201 +21,96 @@ const iconRefs = {
 };
 
 const navItems: { key: NavKey; label: string; ref: string }[] = [
-  { key: "home", label: "主页", ref: iconRefs.home },
-  { key: "profile", label: "个人", ref: iconRefs.profile },
+  { key: "home", label: "首页", ref: iconRefs.home },
+  { key: "profile", label: "工作台", ref: iconRefs.profile },
   { key: "create", label: "创作", ref: iconRefs.create },
   { key: "bell", label: "提醒", ref: iconRefs.bell },
   { key: "message", label: "消息", ref: iconRefs.message },
-];
-
-const enterpriseFeatures = [
-  { title: "发布工具", desc: "通过图片或视频分享设计", personal: true, business: true },
-  { title: "广告管理工具", desc: "管理和跟踪推广计划", personal: false, business: true },
-  { title: "发现和分析工具", desc: "发现表现卓越的 Art 图", personal: false, business: true },
-  { title: "积分和优惠", desc: "获得推广积分等的资格", personal: false, business: true },
 ];
 
 const assetUrl = (imageRef: string) => `${ASSET_BASE}/${imageRef}.png`;
 
 function ExistingAccountIcon() {
   return (
-    <svg
-      className={styles.optionIcon}
-      viewBox="0 0 64 64"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle cx="32" cy="32" r="32" fill="#1f9be5" />
-      <circle cx="27" cy="24" r="8" fill="none" stroke="#fff" strokeWidth="3" />
-      <path d="M15 42c2-7 8-11 16-11s14 4 16 11" fill="none" stroke="#fff" strokeWidth="3" />
-      <path d="M44 33v10M39 38h10" fill="none" stroke="#fff" strokeLinecap="round" strokeWidth="3" />
+    <svg className={styles.accountIcon} viewBox="0 0 68 68" aria-hidden="true" focusable="false">
+      <circle cx="34" cy="34" r="34" fill="#2599E0" />
+      <circle cx="31.5" cy="25.5" r="8.5" fill="none" stroke="#fff" strokeWidth="3.5" />
+      <path d="M20 44.5c2.3-7 8.4-11.3 15.7-11.3 4.9 0 9.4 1.8 12.4 5" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M47.5 33.5v15" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M40 41h15" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" />
     </svg>
   );
 }
 
 function PersonalAccountIcon() {
   return (
-    <svg
-      className={styles.optionIcon}
-      viewBox="0 0 64 64"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle cx="32" cy="32" r="32" fill="#e22b8f" />
-      <circle cx="32" cy="32" r="16" fill="none" stroke="#fff" strokeWidth="3" />
-      <path d="M32 24v16M24 32h16" fill="none" stroke="#fff" strokeLinecap="round" strokeWidth="3.5" />
+    <svg className={styles.accountIcon} viewBox="0 0 68 68" aria-hidden="true" focusable="false">
+      <circle cx="34" cy="34" r="34" fill="#D92B8C" />
+      <circle cx="34" cy="34" r="22" fill="none" stroke="#fff" strokeWidth="4" />
+      <path d="M34 24v20" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+      <path d="M24 34h20" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
     </svg>
   );
 }
 
 function EnterpriseAccountIcon() {
   return (
-    <svg
-      className={styles.optionIcon}
-      viewBox="0 0 64 64"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <circle cx="32" cy="32" r="32" fill="#0b57a5" />
-      <rect
-        x="17"
-        y="19"
-        width="30"
-        height="26"
-        rx="4"
-        fill="none"
-        stroke="#fff"
-        strokeWidth="3"
-      />
-      <circle cx="27" cy="31.5" r="2.4" fill="#fff" />
-      <path d="M33 31.5h8" stroke="#fff" strokeLinecap="round" strokeWidth="3" />
-      <path d="M22 41h20" stroke="#fff" strokeLinecap="round" strokeWidth="3" />
+    <svg className={styles.accountIcon} viewBox="0 0 68 68" aria-hidden="true" focusable="false">
+      <circle cx="34" cy="34" r="34" fill="#0B57A5" />
+      <rect x="18" y="20" width="32" height="28" rx="4.5" fill="none" stroke="#fff" strokeWidth="3.5" />
+      <circle cx="28" cy="32" r="2.5" fill="#fff" />
+      <path d="M35 31.5h8.5" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M25 41.5h18.5" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" />
     </svg>
   );
 }
 
-export default function Home() {
+export default function LoginPage() {
   const router = useRouter();
-  const [activeNav, setActiveNav] = useState<NavKey>("home");
+  const [activeNav, setActiveNav] = useState<NavKey | null>(null);
   const [searchValue, setSearchValue] = useState("");
-  const [toast, setToast] = useState<ToastState | null>(null);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [loginErrors, setLoginErrors] = useState<LoginErrors>({});
-  const [loginForm, setLoginForm] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [toast, setToast] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastSearchKeywordRef = useRef("");
 
-  const showToast = useCallback((message: string, status: ToastStatus = "info") => {
+  const showToast = (message: string) => {
     if (toastTimerRef.current) {
       clearTimeout(toastTimerRef.current);
     }
 
-    setToast({ message, status });
-    toastTimerRef.current = setTimeout(() => {
+    setToast(message);
+    toastTimerRef.current = window.setTimeout(() => {
       setToast(null);
       toastTimerRef.current = null;
     }, 2200);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (toastTimerRef.current) {
-        clearTimeout(toastTimerRef.current);
-      }
-    };
-  }, []);
-
-  const notifyDeveloping = useCallback(
-    (feature: string) => {
-      showToast(`${feature}正在开发中`);
-    },
-    [showToast],
-  );
-
-  const handleSearchSubmit = () => {
-    const keyword = searchValue.replace(/\s+/g, " ").trim();
-    if (!keyword) {
-      showToast("请输入关键字后再搜索", "error");
-      return;
-    }
-
-    if (keyword.length < 2) {
-      showToast("请至少输入 2 个字符", "error");
-      return;
-    }
-
-    if (keyword === lastSearchKeywordRef.current) {
-      showToast(`“${keyword}”已搜索过，正在为你定位结果（演示）`);
-      return;
-    }
-
-    lastSearchKeywordRef.current = keyword;
-    setSearchValue(keyword);
-    notifyDeveloping(`“${keyword}”搜索功能`);
   };
 
-  const handleNavClick = (key: NavKey, label: string) => {
+  const handleNavClick = (key: NavKey) => {
     setActiveNav(key);
+
     if (key === "home") {
       router.push("/");
       return;
     }
+
     if (key === "profile") {
       router.push("/workspace");
       return;
     }
+
     if (key === "create") {
       router.push("/create");
       return;
     }
-    notifyDeveloping(`${label}页面`);
-  };
 
-  const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const nextErrors: LoginErrors = {};
-
-    if (!loginForm.email.trim()) {
-      nextErrors.email = "请输入邮箱";
-    } else if (!/^\S+@\S+\.\S+$/.test(loginForm.email.trim())) {
-      nextErrors.email = "邮箱格式不正确";
-    }
-
-    if (!loginForm.password.trim()) {
-      nextErrors.password = "请输入密码";
-    }
-
-    if (nextErrors.email || nextErrors.password) {
-      setLoginErrors(nextErrors);
+    if (key === "bell") {
+      router.push("/updates");
       return;
     }
 
-    setLoginErrors({});
-    setIsLoggingIn(true);
-
-    setTimeout(() => {
-      setIsLoggingIn(false);
-      setShowLoginModal(false);
-      setLoginForm((prev) => ({ email: prev.email.trim(), password: "" }));
-      showToast("登录成功，正在进入首页（演示）", "success");
-    }, 750);
+    if (key === "message") {
+      router.push("/messages");
+    }
   };
-
-  const toastClass = toast
-    ? toast.status === "success"
-      ? styles.toastSuccess
-      : toast.status === "error"
-        ? styles.toastError
-        : styles.toastInfo
-    : "";
 
   return (
     <div className={styles.page}>
@@ -243,7 +127,7 @@ export default function Home() {
               key={item.key}
               type="button"
               className={activeNav === item.key ? styles.navButtonActive : styles.navButton}
-              onClick={() => handleNavClick(item.key, item.label)}
+              onClick={() => handleNavClick(item.key)}
               aria-label={item.label}
             >
               <span
@@ -259,21 +143,16 @@ export default function Home() {
           type="button"
           className={styles.navButtonBottom}
           aria-label="设置"
-          onClick={() => notifyDeveloping("设置页面")}
+          onClick={() => showToast("设置功能待开发")}
         >
-          ⚙
+          <SettingsGearIcon className={styles.settingsIcon} />
         </button>
       </aside>
 
       <div className={styles.workspace}>
         <header className={styles.topHeader}>
           <div className={styles.searchBox}>
-            <button
-              type="button"
-              className={styles.searchTrigger}
-              onClick={handleSearchSubmit}
-              aria-label="执行搜索"
-            >
+            <button type="button" className={styles.searchTrigger} aria-label="执行搜索">
               <span
                 className={styles.searchIcon}
                 style={{ backgroundImage: cssBackgroundUrl(assetUrl(iconRefs.search)) }}
@@ -283,53 +162,22 @@ export default function Home() {
             <input
               className={styles.searchInput}
               value={searchValue}
-              onChange={(event) => setSearchValue(event.target.value.slice(0, 60))}
+              onChange={(event) => setSearchValue(event.target.value)}
               placeholder="搜索你想要的设计方案"
               aria-label="搜索你想要的设计方案"
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  handleSearchSubmit();
-                }
-                if (event.key === "Escape") {
-                  setSearchValue("");
-                }
-              }}
             />
           </div>
 
           <div className={styles.headerActions}>
-            <button type="button" className={styles.loginEntryButton} onClick={() => router.push("/")}>
-              返回首页
+            <button type="button" className={styles.loginEntryButton} onClick={() => router.push("/login")}>
+              登录
             </button>
-            <div className={styles.profileEntry}>
-              <button
-                type="button"
-                className={styles.avatarButton}
-                aria-label="个人菜单"
-                onClick={() => setProfileMenuOpen((prev) => !prev)}
-              />
-              <button
-                type="button"
-                className={styles.arrowButton}
-                aria-label="展开个人菜单"
-                onClick={() => setProfileMenuOpen((prev) => !prev)}
-              >
-                ˅
-              </button>
-              {profileMenuOpen ? (
-                <div className={styles.profileMenu}>
-                  <button type="button" onClick={() => notifyDeveloping("个人资料编辑")}>
-                    编辑资料
-                  </button>
-                  <button type="button" onClick={() => notifyDeveloping("账户切换")}>
-                    切换账户
-                  </button>
-                  <button type="button" onClick={() => notifyDeveloping("退出登录")}>
-                    退出登录
-                  </button>
-                </div>
-              ) : null}
-            </div>
+            <button
+              type="button"
+              className={styles.avatarButton}
+              aria-label="个人菜单"
+              onClick={() => router.push("/settings?section=profile")}
+            />
           </div>
         </header>
 
@@ -344,7 +192,7 @@ export default function Home() {
               <ExistingAccountIcon />
               <h2>已有帐户</h2>
               <p>添加你已有的帐户</p>
-              <button type="button" className={styles.ghostButton} onClick={() => setShowLoginModal(true)}>
+              <button type="button" className={styles.mutedButton}>
                 登录帐户
               </button>
             </article>
@@ -353,177 +201,36 @@ export default function Home() {
               <PersonalAccountIcon />
               <h2>新建个人帐户</h2>
               <p>使用其他电子邮箱创建帐户</p>
-              <button
-                type="button"
-                className={styles.primaryButton}
-                onClick={() => notifyDeveloping("个人账户创建功能")}
-              >
+              <button type="button" className={styles.primaryButton}>
                 创建
               </button>
             </article>
 
-            <article className={styles.accountCardHighlight}>
+            <article className={styles.accountCard}>
               <EnterpriseAccountIcon />
               <h2>新建免费企业帐户</h2>
-              <p className={styles.featureTitle}>解锁工具以助力：</p>
-              <ul className={styles.featureList}>
-                <li>发展受众</li>
-                <li>吸引流量</li>
-                <li>销售更多产品</li>
-              </ul>
-              <button type="button" className={styles.ghostButton} onClick={() => setShowUpgradeModal(true)}>
+              <div className={styles.enterpriseFeatures}>
+                <p>解锁工具以助力：</p>
+                <ul className={styles.featureList}>
+                  <li>发展受众</li>
+                  <li>吸引流量</li>
+                  <li>销售更多产品</li>
+                </ul>
+              </div>
+              <button type="button" className={styles.mutedButton}>
                 创建
               </button>
             </article>
           </section>
 
-          <section className={styles.bottomBlock}>
+          <section className={styles.accountHint}>
             <h3>管理你的帐户</h3>
             <p>在设置中，随时更改你的帐户和个人信息。</p>
           </section>
         </main>
       </div>
 
-      {showLoginModal ? (
-        <div
-          className={styles.modalBackdrop}
-          role="presentation"
-          onClick={() => {
-            setShowLoginModal(false);
-            setLoginErrors({});
-          }}
-        >
-          <div
-            className={styles.loginModal}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="login-modal-title"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <h3 id="login-modal-title">登录已有帐户</h3>
-            <p>请输入邮箱和密码继续（演示逻辑）。</p>
-            <form onSubmit={handleLoginSubmit}>
-              <label className={styles.fieldLabel}>
-                邮箱
-                <input
-                  type="email"
-                  value={loginForm.email}
-                  onChange={(event) =>
-                    setLoginForm((prev) => ({
-                      ...prev,
-                      email: event.target.value,
-                    }))
-                  }
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                />
-              </label>
-              {loginErrors.email ? <p className={styles.fieldError}>{loginErrors.email}</p> : null}
-
-              <label className={styles.fieldLabel}>
-                密码
-                <input
-                  type="password"
-                  value={loginForm.password}
-                  onChange={(event) =>
-                    setLoginForm((prev) => ({
-                      ...prev,
-                      password: event.target.value,
-                    }))
-                  }
-                  placeholder="请输入密码"
-                  autoComplete="current-password"
-                />
-              </label>
-              {loginErrors.password ? (
-                <p className={styles.fieldError}>{loginErrors.password}</p>
-              ) : null}
-
-              <button
-                type="button"
-                className={styles.textAction}
-                onClick={() => notifyDeveloping("找回密码功能")}
-              >
-                忘记密码？
-              </button>
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.cancelButton}
-                  onClick={() => {
-                    setShowLoginModal(false);
-                    setLoginErrors({});
-                  }}
-                >
-                  取消
-                </button>
-                <button type="submit" className={styles.confirmButton} disabled={isLoggingIn}>
-                  {isLoggingIn ? "登录中..." : "登录"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      ) : null}
-
-      {showUpgradeModal ? (
-        <div
-          className={styles.modalBackdrop}
-          role="presentation"
-          onClick={() => setShowUpgradeModal(false)}
-        >
-          <div
-            className={styles.upgradeModal}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="upgrade-modal-title"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <h3 id="upgrade-modal-title">升级为免费企业账户</h3>
-            <p>
-              借助工具（例如广告和分析工具）拓展业务或品牌。你的内容、个人资料和粉丝将保持不变。你可以在设置中撤消此更改。
-            </p>
-
-            <div className={styles.compareTable}>
-              <div className={styles.compareHead}>
-                <span>功能</span>
-                <span>个人</span>
-                <span>企业</span>
-              </div>
-              {enterpriseFeatures.map((item) => (
-                <div className={styles.compareRow} key={item.title}>
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p>{item.desc}</p>
-                  </div>
-                  <span>{item.personal ? "✓" : ""}</span>
-                  <span>{item.business ? "✓" : ""}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.modalActions}>
-              <button type="button" className={styles.cancelButtonWide} onClick={() => setShowUpgradeModal(false)}>
-                取消
-              </button>
-              <button
-                type="button"
-                className={styles.confirmButtonWide}
-                onClick={() => notifyDeveloping("企业账户升级功能")}
-              >
-                升级
-              </button>
-            </div>
-
-            <p className={styles.agreementText}>
-              进行转换，即表示你同意 Artlava 的商业服务条款并且确认你已阅读我们的隐私政策，信息收集声明。
-            </p>
-          </div>
-        </div>
-      ) : null}
-
-      {toast ? <div className={`${styles.toast} ${toastClass}`}>{toast.message}</div> : null}
+      {toast ? <div className={styles.toast}>{toast}</div> : null}
     </div>
   );
 }

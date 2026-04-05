@@ -1,0 +1,202 @@
+.page {
+  min-height: 100vh;
+  background: #f2f4f7;
+  color: #111827;
+}
+
+.container {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.backLink,
+.profileLink {
+  height: 38px;
+  border-radius: 12px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.backLink {
+  background: #ffffff;
+}
+
+.profileLink {
+  background: #e60023;
+  color: #ffffff;
+}
+
+.hero {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.visualWrap,
+.heroInfo,
+.relatedCard {
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.visualWrap {
+  overflow: hidden;
+}
+
+.visual {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.heroInfo {
+  padding: 24px;
+}
+
+.category {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e60023;
+}
+
+.heroInfo h1 {
+  margin-top: 10px;
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.summary {
+  margin-top: 14px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+.description {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #4b5563;
+}
+
+.metaList {
+  margin-top: 24px;
+  display: grid;
+  gap: 14px;
+}
+
+.metaList div {
+  display: grid;
+  gap: 3px;
+}
+
+.metaList dt {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.metaList dd {
+  font-size: 15px;
+}
+
+.tagRow {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tagRow span {
+  height: 34px;
+  border-radius: 999px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  background: #eff2f6;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.relatedSection {
+  margin-top: 36px;
+}
+
+.relatedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.relatedHeader h2 {
+  font-size: 28px;
+}
+
+.relatedGrid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.relatedCard {
+  overflow: hidden;
+}
+
+.relatedImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.relatedMeta {
+  padding: 12px;
+}
+
+.relatedMeta h3 {
+  font-size: 18px;
+}
+
+.relatedMeta p {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+@media (max-width: 980px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 16px 12px 36px;
+  }
+
+  .header,
+  .relatedHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroInfo h1 {
+    font-size: 30px;
+  }
+}
